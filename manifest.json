@@ -1,0 +1,44 @@
+{
+    "manifest_version": 3,
+    "name": "English to Bangla Dictionary",
+    "version": "1.0",
+    "description": "Double-click a word to get Bangla meaning, synonyms, antonyms.",
+    "permissions": [
+        "scripting",
+        "activeTab"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "css": [
+                "content.css"
+            ]
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "BengaliDictionary.json",
+                "popup.js"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ],
+    "icons": {
+        
+        "128": "EtoB Dictionary logo128.png"
+    }
+}
