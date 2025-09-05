@@ -1,25 +1,31 @@
 let dictionaryData = [];
 
+// Load dictionary and store in chrome.storage.local
 function loadDictionaryData() {
   fetch(chrome.runtime.getURL("BengaliDictionary.json"))
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
       dictionaryData = data;
+      if (chrome.storage && chrome.storage.local) {
+        chrome.storage.local.set({ dictionaryData });
+
+      }
     })
-    .catch(err => console.error('Failed to load BengaliDictionary.json', err));
+    .catch(err =>
+      console.error('Failed to load BengaliDictionary.json', err
+
+      ));
 }
 
-// Load dictionary data when the background script starts
+// Load on start and on install/update
 loadDictionaryData();
-
-// Optional: Reload data on install/update if needed
 chrome.runtime.onInstalled.addListener(loadDictionaryData);
 
+// Provide dictionary to popup/content
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === 'getDictionaryData') {
-    // Send the current dictionaryData (may be empty if still loading)
+    // Send current dictionaryData (may still be empty)
     sendResponse(dictionaryData);
-    // Keep the message channel open for async response
-    return true;
+    return true; // keep channel open for async if needed
   }
 });
